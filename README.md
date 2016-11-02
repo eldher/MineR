@@ -298,7 +298,7 @@ gg <- gg + theme_tufte(base_family="Helvetica") + theme(axis.text.x = element_te
 gg
 ```
 El resultado final en ggplot es bueno pero le falta ajuste, así que anexo el final en Excel.
-
+![alt tag](https://github.com/eldher/MineR/blob/master/ggplot_test.jpg?raw=true)
 
 ![alt tag](https://github.com/eldher/MineR/blob/master/Untitled.jpg)
 
