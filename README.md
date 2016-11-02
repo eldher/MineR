@@ -168,3 +168,65 @@ LoadCloseupHistoric <- function(nFiles) {
   GTimeLine   <<- TimeLine
 } 
 ```
+
+Ahora la siguiente función sirve para calcular el _Score_
+
+```r
+calculateScore <- function(id){
+  plusFactor = 1
+  minusFactor = -0.3
+  
+  # logistic parameters
+  logistic_min_value = 1
+  logistic_max_value = 25
+  logistic_stepness = 1
+  logistic_mid_value = dim(GTimeLine)[1] - 12
+  
+  medData <<- filter(GUnitedProd,MedicoUnico == id & P == Prod)
+  dim(medData)[1]
+  if (dim(medData)[1] != 0){
+    dscore <- left_join(GTimeLine,medData,by='Periodo')
+    dscore$MedicoUnico[is.na(dscore$MedicoUnico)] <- id
+    dscore$Recency <- c(dim(dscore)[1]:1)
+    dscore$M[is.na(dscore$M)] <- 0
+    dscore$Step[!is.na(dscore$P)] <- plusFactor
+    dscore$Step[is.na(dscore$P)] <- minusFactor
+    dscore$WeightedStep <- dscore$M/100 + dscore$Step
+    dscore$LogisticRecency <- 
+      logistic_min_value + (logistic_max_value - logistic_min_value)/(logistic_min_value + exp(logistic_stepness*(dscore$Recency-logistic_mid_value)))
+    dscore$RecencyWeightedLogistic <- dscore$WeightedStep*dscore$LogisticRecency
+    dscore$Score <- cumsum(dscore$RecencyWeightedLogistic)
+    final <- dim(dscore)[1]
+    out <- data.frame(MedicoUnico = id, score = dscore$Score[final])
+    ScoreMatrix <<- rbind(ScoreMatrix,out)
+  }
+}
+```
+
+Y esta es un wrapper para la función _Score_. Esta sólo permite abreviar muchas partes del código necesaria para ordenar y filtrar la data proveniente del histórico.
+
+```r
+scoreWrapper <- function(){
+  
+  casted_Arahkor <- filter(GUnitedProd,GUnitedProd$P == Prod)
+  
+  # how many data points there are
+  dataPoints <- as.data.frame(table(casted_Arahkor$MedicoUnico))
+  casted_Arahkor$M <- as.numeric(casted_Arahkor$M)
+  
+  
+  filtered <- select(dataPoints,MedicoUnico = Var1, Freq)
+  
+  # Scoring function --------------------------
+  
+  ScoreMatrix <<- data.frame( MedicoUnico = character(), score = double())
+  
+  results <- lapply(filtered$MedicoUnico, calculateScore)
+  rownames(ScoreMatrix) <- NULL
+  return(ScoreMatrix)
+}
+```
+
+
+
+
