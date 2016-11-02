@@ -27,6 +27,8 @@ Y crear las variables globales, en este caso producto
 Prod = "ARAHKOR SDH" 
 ```
 
+La data a usar viene en "ventanas" de 24 meses, por tanto para no perder información histórica, hay que ir analizando cada archivo e ir uniéndolo al siguiente. Para cada uno, se definirá una métrica llamada _Score_, que se detallará más adelante. Este _Score_ toma en cuenta el periodo de tiempo, así que es necesario ir acumulando la data.
+
 La siguiente función carga el histórico de Close-Up. Cada nombre está codificado de la forma AAAAMMDD_HISTORICO.CSV. La función recibe como parámetro el número de archivos históricos que va a unir. Cada archivo es una ventana móvil de 24 meses, partiendo desde NOV2014. Al estar ordenadas por orden cronológico el output sería el siguiente:
 
 1. LoadCloseupHistoric(1) >> Información del primer archivo 20160601_HISTORICO.csv
