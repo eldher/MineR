@@ -300,5 +300,5 @@ gg
 El resultado final en ggplot es bueno pero le falta ajuste.
 
 
-
+![alt tag]https://github.com/eldher/MineR/blob/master/Untitled.jpg
 
