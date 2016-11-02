@@ -21,11 +21,6 @@ library(viridis)
 # install.packages("ggthemes")
 library(ggthemes)
 ```
-Y crear las variables globales, en este caso producto
-
-```R
-Prod = "ARAHKOR SDH" 
-```
 
 La data a usar viene en "ventanas" de 24 meses, por tanto para no perder información histórica, hay que ir analizando cada archivo e ir uniéndolo al siguiente. Para cada uno, se definirá una métrica llamada _Score_, que se detallará más adelante. Este _Score_ toma en cuenta el periodo de tiempo, así que es necesario ir acumulando la data.
 
@@ -49,8 +44,8 @@ LoadCloseupHistoric <- function(nFiles) {
   # In this case only DocData is needed
   # note: add better output
   
-  rData = "C:/Stendhal/3.data_sources/historic"
-  Prod = "ARAHKOR SDH" 
+  rData = "C:/******/3.data_sources/historic"
+  Prod = "A******H" 
   calculateSpecialty = "no"
   setwd(rData)
   
