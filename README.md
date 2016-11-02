@@ -28,6 +28,7 @@ Prod = "ARAHKOR SDH"
 ```
 
 La siguiente función carga el histórico de Close-Up. Cada nombre está codificado de la forma AAAAMMDD_HISTORICO.CSV. La función recibe como parámetro el número de archivos históricos que va a unir. Cada archivo es una ventana móvil de 24 meses, partiendo desde NOV2014. Al estar ordenadas por orden cronológico el output sería el siguiente:
+
 1. LoadCloseupHistoric(1) >> Información del primer archivo 20160601_HISTORICO.csv
 2. LoadCloseupHistoric(2) >> Información de los archivos 20160601_HISTORICO.csv y 20160701_HISTORICO.csv
 3. LoadCloseupHistoric(3) >> Información de los archivos 20160601_HISTORICO.csv, 20160701_HISTORICO.csv y 20160801_HISTORICO.csv.
