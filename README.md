@@ -227,6 +227,20 @@ scoreWrapper <- function(){
 }
 ```
 
+Ahora, cargamos la data y calculamos el score, corriendo la ventana hasta AGO2016, siendo la última data disponible.
+```r
+for (i in c(1:3)) {
+  LoadCloseupHistoric(i)
+  assign(paste0("data",i),scoreWrapper())
+}
+
+
+data1$date <- 201606
+data2$date <- 201607
+data3$date <- 201608
+total_data <- rbind(data1,data2,data3)
+total_data_casted <- dcast(data=total_data,MedicoUnico ~ date, value.var = "score")
+```
 
 
 
