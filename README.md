@@ -242,5 +242,63 @@ total_data <- rbind(data1,data2,data3)
 total_data_casted <- dcast(data=total_data,MedicoUnico ~ date, value.var = "score")
 ```
 
+Con esto ya podemos filtrar a los médicos que van decayendo en su prescripción
+
+```r
+
+sf2 <- left_join(sf,total_data_casted, by = c("numeracion_close_up" = "MedicoUnico"))
+
+declining <- filter(sf2, `201606` < 0 & `201606` > `201607` &  `201607` > `201608`)
+
+last_dates <- GUnitedProd %>%  
+  filter(P == Prod)  %>% 
+  select(MedicoUnico,Periodo,M) %>% 
+  group_by(MedicoUnico) %>% 
+  summarise(date = max(Periodo))
+
+last_dates2 <- 
+  GUnitedProd %>%  
+  filter(P == Prod)  %>% 
+  select(MedicoUnico,Periodo,M) 
+
+total_dates <- inner_join(last_dates,last_dates2, by = c("MedicoUnico" = "MedicoUnico", "date"="Periodo"))
+
+declining <- left_join(declining,total_dates,by = c("numeracion_close_up" = "MedicoUnico"))
+
+
+saveFileName = paste0("declining",format(Sys.time(), "%Y%m%d_%H%M%S"),".csv")
+write.csv(declining,saveFileName,row.names = FALSE, na="")
+```
+
+El output es una .csv con los tres últimos scores, unida a la data de Salesforce. Adicional la última fecha de receta y el Market Share correspondiente. Finalmente el data product es una matriz de fechas, indicando la entrada/salida de las prescripciones.
+
+```r
+
+# Date Matrix
+first_dates <- GUnitedProd %>%  filter(P == Prod)  %>% select(MedicoUnico,Periodo,M) %>% group_by(MedicoUnico) %>% summarise(date = min(Periodo))
+first_dates2 <- GUnitedProd %>%  filter(P == Prod)  %>% select(MedicoUnico,Periodo,M) 
+init_dates <- inner_join(first_dates,first_dates2, by = c("MedicoUnico" = "MedicoUnico", "date"="Periodo"))
+
+init_dates <- rename(init_dates,Init_date = date)
+total_dates <- rename(total_dates,Final_date = date)
+date_matrix <- inner_join(init_dates,total_dates, by= c("MedicoUnico" = "MedicoUnico")) %>% select(MedicoUnico,Init_date,Final_date)
+date_matrix_count <- date_matrix %>% group_by(Init_date,Final_date) %>% summarise(total = n())
+
+date_matrix_casted <- dcast(date_matrix_count,
+                            Init_date ~ Final_date, value.var = "total" )
+
+saveFileName = paste0("date_matrix",format(Sys.time(), "%Y%m%d_%H%M%S"),".csv")
+write.csv(date_matrix_casted,saveFileName,row.names = FALSE, na="")
+
+plot(date_matrix_casted)
+dev.off()
+gg <- ggplot(date_matrix_count,aes(x=Init_date,y=Final_date,fill=total)) + geom_tile(color="white", size=0.1)
+gg <- gg + scale_fill_viridis(name="# Events", label=comma, direction = -1) + coord_equal()
+gg <- gg + theme_tufte(base_family="Helvetica") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+gg
+```
+El resultado final en ggplot es bueno pero le falta ajuste.
+
+
 
 
