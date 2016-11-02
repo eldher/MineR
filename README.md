@@ -1,6 +1,6 @@
-# MineR
+# ScoreR
 
-Análisis de Dropout
+##Análisis de Dropout
 
 Primero borrar todo el workspace para evitar errores
 
@@ -297,7 +297,7 @@ gg <- gg + scale_fill_viridis(name="# Events", label=comma, direction = -1) + co
 gg <- gg + theme_tufte(base_family="Helvetica") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 gg
 ```
-El resultado final en ggplot es bueno pero le falta ajuste.
+El resultado final en ggplot es bueno pero le falta ajuste, así que anexo el final en Excel.
 
 
 ![alt tag](https://github.com/eldher/MineR/blob/master/Untitled.jpg)
