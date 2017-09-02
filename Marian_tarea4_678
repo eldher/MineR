@@ -1,0 +1,39 @@
+## parte 4
+
+### Pregunta 6
+setwd("C:/Users/eldher.hernandez/Documents/5.promidat/tarea4_series_tiempo/data")
+data <- read.csv2("DJTable.csv", stringsAsFactors = FALSE, dec=".")
+data$X <- NULL
+Series <- as.data.frame(t(data))
+
+# Ejemplos
+idx <- c(1,5,15,10,20,30)
+Ejemplos <- t(Series[idx,])
+plot.ts(Ejemplos)
+acp.series = prcomp(Series)
+biplot(acp.series)
+
+
+suppressMessages(library(FactoMineR))
+res<-PCA(Series, scale.unit=TRUE, ncp=5, graph = FALSE)
+plot(res, axes=c(1, 2), choix="ind", col.ind="Red",new.plot=TRUE)
+plot(res, axes=c(1, 2), choix="var", col.var="blue",new.plot=TRUE)
+res
+
+### Pregunta 7 -- clasificacion Jerarquica con DTW ----
+
+# install.packages("dtw",dependencies=T)
+suppressWarnings(suppressMessages(library(dtw)))
+# install.packages("rattle",dependencies=T)
+suppressWarnings(suppressMessages(library(rattle))) # Se requiere para la función centers.hclust
+
+clust.series <- hclust(dist(Series,method="DTW"), method="average")
+plot(clust.series)
+centros<-centers.hclust(Series,clust.series,nclust=3 ,use.median=FALSE)
+plot.ts(t(centros), main="Centros de Gavedad",type="o")
+
+
+### Pregunta 8 -- K Means ----
+
+grupos<-kmeans(Series,3,iter.max = 1000)
+plot.ts(t(grupos$centers), main="Centros de Gravedad",type="o")
