@@ -27,20 +27,18 @@ totalss <- sum(sumOfSquares)
 
 calcularIntraClase <- function(n){
 
-  DT <- cbind(data, clust = results[[n]]$cluster)
-  DT <- as.data.table(DT)
+  DT <- as.data.table(data)
   
   print(paste0("-----",algos[[n]]))
 
-  data_c1 <- DT[clust==1 ,c(1:3), with = FALSE]  # tabla con solo datos, sin el ID cluster. Cluster 1
+  data_c1 <- DT[which(results[[n]]$cluster == 1)]
   cluster_1 <- apply(data_c1, 1, function(params) (params - results[[1]]$centers[1,])^2)
   s1 <- sum(cluster_1)
 
-  
-  data_c2 <- DT[clust==2 ,c(1:3), with = FALSE] # tabla con solo datos, sin el ID cluster. Cluster 2
+  data_c2 <- DT[which(results[[n]]$cluster == 2)]
   cluster_2 <- apply(data_c2, 1, function(params) (params - results[[2]]$centers[1,])^2)
-
   s2 <- sum(cluster_2)
+  
   print(paste0("Cluster1: ",s1," cluster2: ",s2," Suma: ",s1+s2))
 }
 
