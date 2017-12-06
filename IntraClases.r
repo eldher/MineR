@@ -33,11 +33,11 @@ results[[1]]$cluster
 results[[2]]$cluster
 
 
-
-  global_center <- colMeans(data) 
-  sumOfSquares <- apply(data,1, function(params)
-    (params[1] - global_center[1])^2 + (params[2] - global_center[2])^2 + (params[3] - global_center[3])^2)  
-  totalss <- sum(sumOfSquares)
+# centro global
+global_center <- colMeans(data) 
+sumOfSquares <- apply(data,1, function(params)
+  (params[1] - global_center[1])^2 + (params[2] - global_center[2])^2 + (params[3] - global_center[3])^2)  
+totalss <- sum(sumOfSquares)
 
 
 
