@@ -12,13 +12,17 @@ results <-
 # los centros los ves asi
 
 # Hartingan-Wong"
-results[[1]]$centers
+results[[1]]$centers[1,]
+results[[1]]$betweenss
+results[[1]]$withinss
+results[[1]]$totss
+results[[1]]$tot.withinss
+
 
 #Lloyd"
 results[[2]]$centers
 
 # etc.....
-
 
 # Y los clusters a los cuales pertenecen 
 
@@ -30,9 +34,15 @@ results[[2]]$cluster
 
 
 
+  global_center <- colMeans(data) 
+  sumOfSquares <- apply(data,1, function(params)
+    (params[1] - global_center[1])^2 + (params[2] - global_center[2])^2 + (params[3] - global_center[3])^2)  
+  totalss <- sum(sumOfSquares)
+
+
+
 calcularIntraClase <- function(n){
 
- #n=1
   DT <- cbind(data, clust = results[[n]]$cluster)
   DT <- as.data.table(DT)
   
@@ -49,23 +59,23 @@ calcularIntraClase <- function(n){
   cluster_1 <- apply(data_c1, 1, function(params) 
                     (params[1] - results[[1]]$centers[1,][1])^2 + 
                     (params[2] - results[[1]]$centers[1,][2])^2 +
-                    (params[2] - results[[1]]$centers[1,][3])^2)
+                    (params[3] - results[[1]]$centers[1,][3])^2)
   
-  print(mean(cluster_1))
-  
+  s1 <- sum(cluster_1)
+
   
   data_c2 <- DT[clust==2 ,c(1,2,3), with = FALSE] # tabla con solo datos, sin el ID cluster. Cluster 2
   
   
   cluster_2 <- apply(data_c2, 1, function(params) 
-    (params[1] - results[[2]]$centers[1,][1])^2 + 
-    (params[2] - results[[2]]$centers[1,][2])^2 +
-    (params[2] - results[[2]]$centers[1,][3])^2)
+    (params[1] - results[[1]]$centers[2,][1])^2 + 
+    (params[2] - results[[1]]$centers[2,][2])^2 +
+    (params[3] - results[[1]]$centers[2,][3])^2)
   
-  print(mean(cluster_2))
+  s2 <- sum(cluster_2)
+  print(paste0("Cluster1: ",s1," cluster2: ",s2," Suma: ",s1+s2))
   
 }
 
-sapply(c(1:4), calcularIntraClase)
-  
+exec <- sapply(c(1:4), calcularIntraClase)
   
