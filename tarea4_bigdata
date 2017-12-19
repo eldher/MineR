@@ -1,0 +1,84 @@
+setwd("C:/Users/eldher.hernandez/Documents/5.promidat/bigdata_tarea4")
+
+install.packages("RSDA")
+
+
+library(RSDA)
+library(data.table)
+
+data(USCrime)
+dim(USCrime)
+# 
+# USCrime
+# 
+# state: concepto
+# 
+# NumUnderPov: number of people under the poverty level (numeric - decimal) 
+# 
+# NumStreet: number of homeless people counted in the street (numeric - decimal) 
+# 
+# perCapInc: per capita income (numeric - decimal) 
+# 
+# PoliceCars: number of police cars (numeric - decimal) 
+# 
+# MedYrHousBuilt: median year housing units built (numeric - decimal) 
+# 
+# ViolentCrimesPerPop: total number of violent crimes per 100K popuation (numeric - decimal) GOAL attribute (to be predicted) 
+
+############## 1
+#a
+
+result  <- classic.to.sym(USCrime, concept="state", 
+                          variables=c("NumUnderPov", "NumStreet", "perCapInc","MedYrHousBuilt","NumImmig","ViolentCrimesPerPop"), 
+                          variables.types=c("$I","$I","$I","$I","$I","$I"))
+
+
+result
+USCrime$state
+result$data[2,]
+install.packages('RSDA', repos='http://cran.us.r-project.org')
+
+lista.mean = list()
+lista.median = list()
+lista.var = list()
+lista.sd = list()
+for(i in 1:6){
+  lista.mean[[i]] <- mean(result[,i], method='interval')
+  lista.median[[i]] <- median(result[,i], method='interval')
+  lista.var[[i]] <- var(result[,i], method='interval')
+  lista.sd[[i]] <- sd(result[,i], method='interval')
+
+}
+
+cor(result[,1], result[,6],method='centers')
+cor(result[,2],result[,3],method='billard')
+
+
+# b
+sym.radar.plot(result[1:3,])
+
+# c
+res <- sym.interval.pca(result,'classic')
+plot(res,choix='ind')
+
+plot(res,choix='var')
+
+
+res <- sym.interval.pca(result,'centers')
+sym.scatterplot(res$Sym.Components[,1], res$Sym.Components[,2],
+                labels=TRUE,col='red',main='Centers PCA Method - USCrime Data')
+
+
+sym.circle.plot(res$Sym.Prin.Correlations)
+
+
+#d 
+DM<-dist(result)
+model<-hclust(DM)
+plot(model,hang = -1)
+
+data("oils",method = "Hausdorff")
+
+#e
+res<-sym.kmeans(result)
+res
