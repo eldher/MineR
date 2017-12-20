@@ -87,6 +87,20 @@ res
 
 #################### ejercicio 2
 
+# Variables
+
+#state: Codigo del Estado USA
+
+#adjusted_gross_income
+#1 = $1 under $25,000 2 = $25,000 under $50,000 3 = $50,000 under $75,000 4 = $75,000 under $100,000 5 = $100,000 under $200,000 6 = $200,000 or more
+
+#total_income_amnt: Total ingresos del contribuyente
+#salaries_wages_amnt: Total salarios del contribuyente
+#student_debt: Total deuda estudiante
+#taxes_paid: Impuestos pagados
+#taxable_income_amnt: Ingresos sujeto a impuesto
+#child_tax_credit: Deducción por hijos
+
 
 setwd("C:/Users/eldher.hernandez/Documents/5.promidat/bigdata_tarea4/individual-income-tax-statistics")
 irs <- read.csv("2013.csv")
