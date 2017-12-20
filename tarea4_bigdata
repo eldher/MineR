@@ -82,3 +82,17 @@ data("oils",method = "Hausdorff")
 #e
 res<-sym.kmeans(result)
 res
+
+
+
+#################### ejercicio 2
+
+
+setwd("C:/Users/eldher.hernandez/Documents/5.promidat/bigdata_tarea4/individual-income-tax-statistics")
+irs <- read.csv("2013.csv")
+irs <- as.data.table(irs)
+
+select_irs <- select(irs, STATE, agi_stub, A02650, A00200, A03210, A18300, A04800, A07220)
+names(select_irs) <-c(
+  "state", "adjusted_gross_income", "total_income_amnt", "salaries_wages_amnt", "student_debt", "taxes_paid", "taxable_income_amnt", "child_tax_credit")
+
