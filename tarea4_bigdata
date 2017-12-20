@@ -84,7 +84,6 @@ res<-sym.kmeans(result)
 res
 
 
-
 #################### ejercicio 2
 
 # Variables
@@ -110,3 +109,7 @@ select_irs <- select(irs, STATE, agi_stub, A02650, A00200, A03210, A18300, A0480
 names(select_irs) <-c(
   "state", "adjusted_gross_income", "total_income_amnt", "salaries_wages_amnt", "student_debt", "taxes_paid", "taxable_income_amnt", "child_tax_credit")
 
+
+impuestos <- classic.to.sym(select_irs, concept=c("state","adjusted_gross_income"),
+  variables=c("total_income_amnt", "salaries_wages_amnt", "student_debt","taxes_paid","taxable_income_amnt","child_tax_credit"),
+  variables.types=c("$I","$I","$I","$I","$I","$I"))
